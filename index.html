@@ -1,29 +1,32 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Type Tester</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body onload="displayMessage(0)">
-    <div class="game-screen">
-      <!-- <div class="message-box"></div> -->
-      <!-- <div class="score"></div> -->
-    </div>
-    <div class="type-area">
-      <textarea name="type" id="type-box" cols="30" rows="10"></textarea>
-    </div>
-    <div>
-      <button class="next-button" onclick="next()">Next</button>
-      <div class="dashboard">
-        <div class="score"></div>
-        <div class="time">
-          <label class="min">00</label>:<label class="sec">00</label>
-        </div>
-        <div class="result"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Type Tester</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body onload="displayMessage(0)">
+  <div class="game-screen">
+    <!-- <div class="message-box"></div> -->
+    <!-- <div class="score"></div> -->
+  </div>
+  <div class="type-area">
+    <textarea name="type" id="type-box" cols="30" rows="10" disabled></textarea>
+  </div>
+  <div>
+    <button class="next-button" onclick="next()">Next</button>
+    <div class="dashboard">
+      <div class="score"></div>
+      <div class="time">
+        <label class="min">00</label>:<label class="sec">00</label>
       </div>
+      <div class="result"></div>
     </div>
-  </body>
-  <script src="script.js"></script>
+  </div>
+</body>
+<script src="script.js"></script>
+
 </html>
