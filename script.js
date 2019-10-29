@@ -1,10 +1,10 @@
 var res = [];
 var paragraphs = [
-  "Lorem ipsum dolor sit amet, ",
-  " Sed in elit purus. Proin convallis augue ac.",
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel ultricies lectus.",
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse non bibendum mauris. Suspendisse vestibulum sapien metus."
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non justo quis elit sodales facilisis. Donec cursus pharetra condimentum. Nullam.",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae ullamcorper diam, efficitur pulvinar quam. Nam egestas dolor nisl, vitae egestas erat porttitor non. Cras nec nunc nec sem venenatis auctor. Duis nec sagittis orci. In gravida risus justo. Nulla.",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae ullamcorper diam, efficitur pulvinar quam. Nam egestas dolor nisl, vitae egestas erat porttitor non. Cras nec nunc nec sem venenatis auctor. Duis nec sagittis orci. In gravida risus justo. Nulla.",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sagittis elit ex, quis tempor nunc vulputate in. Sed nec semper lacus. Suspendisse lorem sapien, pretium elementum volutpat sed, aliquet a nibh. Sed tortor arcu, dictum ut felis dignissim, vulputate rhoncus sapien. Ut sodales, diam id dignissim tempor, lacus lorem vulputate velit, ac gravida nisl tortor mollis enim. Duis id efficitur lectus, nec iaculis lacus. Sed sollicitudin dignissim erat, eu vulputate leo fringilla nec. Pellentesque eget maximus metus. Nam viverra orci.",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet varius arcu. Aliquam scelerisque est erat, eu facilisis nisl aliquam sed. Fusce ac velit rhoncus, convallis mi in, aliquet massa. Nulla quis viverra tellus. Suspendisse tempus quam quam, eu porta odio lobortis at. In vitae nunc accumsan, vehicula neque eget, rhoncus dui. Aenean bibendum tristique pulvinar. Vivamus metus sapien, maximus eu quam vitae, lacinia condimentum libero. Quisque mattis, leo eu efficitur dictum, elit diam bibendum justo, convallis vestibulum quam eros ac nulla. Aliquam consequat fringilla eros, a tempor arcu ultricies eu. Etiam pharetra viverra malesuada. Praesent volutpat magna at."
 ];
 var i = 0;
 var screen = document.getElementsByClassName("game-screen")[0];
@@ -12,7 +12,7 @@ var score = document.getElementsByClassName("score")[0];
 var min = document.getElementsByClassName("min")[0];
 var sec = document.getElementsByClassName("sec")[0];
 var totalSeconds = 0;
-var best = [];
+var best = [0];
 var average = [];
 var finalBest = [];
 var finalAverage = [];
@@ -24,6 +24,8 @@ var f = new Object();
 var a = new Object();
 
 function displayMessage(i) {
+  document.getElementsByClassName("next-button")[0].style.display = "none";
+
   document.getElementById("type-box").disabled = false;
   gameplay = true;
   screen.innerHTML = paragraphs[i];
@@ -38,16 +40,19 @@ function playGame() {
     words = this.value.match(/\S+/g);
     score.innerHTML =
       words.length + "/" + paragraphs[i].match(/\S+/g).length + " words";
+    //document.getElementsByClassName("currentSpeed")[0].innerHTML =
+    // "Current Speed:" + best[best.length - 1];
     if (words.length >= totalWords.length) {
       document.getElementById("type-box").disabled = true;
-      clearInterval(timer);
+      timer = 0;
+      clearInterval(time);
+      document.getElementsByClassName("next-button")[0].style.display = "block";
       result();
     }
   });
 }
 
 function next() {
-  typeBox.value = "";
   clearInterval(time);
   totalSeconds = 0;
   time = setInterval(settime, 1000);
@@ -56,8 +61,9 @@ function next() {
   if (i >= paragraphs.length) {
     document.getElementsByClassName("next-button")[0].style.display = "none";
     displayFinalBest();
-    displayFinalAverage();
+    //displayFinalAverage();
   }
+  typeBox.value = "";
   displayMessage(i);
 }
 
@@ -82,7 +88,17 @@ function result() {
   var bestSpeed = bestScore();
   var avg = averageScore();
   document.getElementsByClassName("result")[0].innerHTML =
-    "-- Best Speed is - " + bestSpeed + " Average speed is - " + avg;
+    "-- Best Speed is - " +
+    bestSpeed +
+    "<br></br>" +
+    " Average speed is - " +
+    avg +
+    "<br></br> " +
+    " Total time taken is :" +
+    document.getElementsByClassName("min")[0].innerHTML +
+    ":" +
+    document.getElementsByClassName("sec")[0].innerHTML;
+
   f[i] = bestSpeed;
   a[i] = avg;
 }
@@ -95,7 +111,11 @@ function speed() {
     var speed = Math.round((60 * len) / (5 * i));
     best.push(speed);
     i++;
-  }, 1000);
+    if (best[best.length - 1] === "undefined") best[best.length - 1] = 0;
+    document.getElementsByClassName("currentSpeed")[0].innerHTML =
+      "Current Speed:" + best[best.length - 1];
+    console.log("speed");
+  }, 5000);
 }
 
 function bestScore() {
@@ -130,11 +150,24 @@ function displayFinalBest() {
   avgSpeedInd = finalAverage.indexOf(avgSpeed) + 1;
 
   document.getElementsByClassName("type-area")[0].innerHTML =
+    "Your Best Speeed was " +
     highspeed +
-    " is your Best Speed in " +
+    " words per minute in " +
     speedIndex +
     ". And " +
+    "your best test was " +
+    avgSpeedInd +
+    " in which your Average Speed was " +
     avgSpeed +
-    "is your Average speed in " +
-    avgSpeedInd;
+    " words per minute";
+  document.getElementsByClassName("game-screen")[0].style.display = "none";
+  document.getElementsByClassName("play-again")[0].style.display = "block";
+  document.getElementsByClassName("currentSpeed")[0].style.display = "none";
+
+  clearInterval(timer);
+  clearInterval(time);
+}
+
+function playAgain() {
+  location.reload();
 }
